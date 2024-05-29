@@ -13,7 +13,7 @@ def mainMenu(firstTime):
     userInput = input("""
     Welcome to the BSS RBC Blue Hive Helper! 
     Please type the number of the option you want to choose:
-        [1] Start helper program (currently only works on upgrade selection screen)
+        [1] Start helper program (currently only works on upgrade selection screen) (make sure you're in fullscreen on roblox and that it's on your main monitor)
         [2] View upgrades and whether they are listed as good or bad upgrades
         [3] Re-create upgrade list (use if you added a new upgrade manually)
         [4] Review settings (these reset if you close the program)
