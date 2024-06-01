@@ -1,10 +1,10 @@
-import pyautogui
-import pytesseract
-from PIL import Image, ImageChops
-import pytesseract
+import pyautogui # type: ignore
+import pytesseract # type: ignore
+from PIL import Image, ImageChops # type: ignore
+import pytesseract # type: ignore
 import time
 import re
-import numpy as np
+import numpy as np # type: ignore
 import random
 
 def print_fun_fact():
@@ -14,7 +14,7 @@ def print_fun_fact():
         "Make sure to save up those quest rerolls! You'll need them on the boss rounds...",
         "When in the quest picking menu, your bees are frozen in place.",
         "When you complete a round, your balloon blessing will refresh.",
-        "Your final score is (5000 x Round Reached)+(1000 x Progress % made in round you lost)+(Total number of earned cogs)"
+        "Your final score is (5000 x Round Reached) + (1000 x Progress % made in round you lost) + (Total number of earned cogs)"
     ]
     print(f"\n     Fun Fact: {random.choice(fun_facts)}")
 
@@ -233,23 +233,25 @@ def get_upgrade_costs():
 
     return upgrade_costs
 
-def DO_UPGRADES(all_upgrades_dictionary, allow_auto_get_locked_upgrades):
-    take_screenshot()
-
+def get_locked_upgrades(all_upgrades_dictionary,allow_auto_get_locked_upgrades):
     cog_amount = find_cog_amount()
     print(f"Cogs: {cog_amount}")
+    upgrade_name_list = get_upgrade_names()
+    should_upgrade, upgrade_true_names = determine_if_choosing_upgrade(upgrade_name_list, all_upgrades_dictionary)
+    if allow_auto_get_locked_upgrades:
+        for i in range(3):
+            if contains_rgb_value(f"pics/lock{i+1}.png", (232,232,232)) == True:
+                print("Found lock in use. Getting upgrade...")
+                get_upgrade(i, cog_amount, upgrade_true_names)
 
+def DO_UPGRADES(all_upgrades_dictionary, allow_auto_get_locked_upgrades):
+    cog_amount = find_cog_amount()
+    get_locked_upgrades(all_upgrades_dictionary,allow_auto_get_locked_upgrades) #this has much of the same as the lines below but i wanted the non-lock upgrade picking code to be clear
 
+    take_screenshot()
     create_lock_images()
     get_upgrade_name_pictures()
     upgrade_name_list = get_upgrade_names()
-
-    should_upgrade,upgrade_true_names = determine_if_choosing_upgrade(upgrade_name_list, all_upgrades_dictionary)
-    upgrade_costs = get_upgrade_costs()
-    
-    if allow_auto_get_locked_upgrades:
-        for i in range(3):
-            if contains_rgb_value(f"pics/lock{i+1}.png", (72,123,82) == False):
-                get_upgrade(i, cog_amount, upgrade_true_names)
+    should_upgrade, upgrade_true_names = determine_if_choosing_upgrade(upgrade_name_list, all_upgrades_dictionary)
 
     get_upgrades(cog_amount,should_upgrade,upgrade_true_names)
