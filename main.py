@@ -53,8 +53,8 @@ def mainMenu(firstTime):
     elif userInput == "5":
         print("""
         THIS UPGRADE CHOOSING SYSTEM IS FLAWED.
-        It is not perfect, I made it myself. Most of them should be right, but it is definitely likely a couple of them are wrong.
-        I tried to be conservative and put the ones I thought were maybe ok as bad so you don't get any bad upgrades on accident.
+        It is not perfect, I made it myself. Most of them should be right, but it is likely a couple of them are wrong.
+        I tried to be conservative and put the some of the ones I thought were "good" as "bad" so you don't get any bad upgrades on accident.
             
         Sometimes, the upgrade list will show the wrong upgrade name, but still end up getting the name right.
         This is due to using a very simplified form of autocorrect.
