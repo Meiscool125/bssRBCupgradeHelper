@@ -1,7 +1,6 @@
 import pyautogui # type: ignore
 import pytesseract # type: ignore
 from PIL import Image, ImageChops # type: ignore
-import pytesseract # type: ignore
 import time
 import re
 import numpy as np # type: ignore
