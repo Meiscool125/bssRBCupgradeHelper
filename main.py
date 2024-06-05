@@ -1,5 +1,11 @@
 from functions import *
+print("""
 
+
+
+
+
+""")
 # Update this path to where Tesseract-OCR is installed
 pytesseract.pytesseract.tesseract_cmd = r'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
 allow_auto_get_locked_upgrades = True
