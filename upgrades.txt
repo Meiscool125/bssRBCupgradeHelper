@@ -67,3 +67,4 @@ GPU = Bad
 Invert = Bad
 Multithread = Bad
 Normalize = Bad
+No Upgrade Found = Bad

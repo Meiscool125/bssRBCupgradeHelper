@@ -67,6 +67,7 @@ def mainMenu(firstTime):
         
         An upgrade not taken by the program does not necessarily mean that it is bad.
         It may just be a medium tier upgrade that the user should choose for themselves.
+        
         """)
         time.sleep(0.5)
         mainMenu(False)

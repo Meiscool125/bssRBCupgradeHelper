@@ -28,8 +28,10 @@ def show_upgrade_dictionary(upgrade_dictionary):
     print("")
 
 def click_on_pos(sleep, position):
+    pyautogui.click(position)
     time.sleep(sleep)
     pyautogui.click(position)
+
 
 def take_screenshot():
     screenshot = pyautogui.screenshot()
@@ -184,8 +186,7 @@ def determine_if_choosing_upgrade(upgrade_name_list, all_upgrades_dictionary):
     print("")
     return should_upgrade, upgrade_true_names
 
-def get_upgrade(upgrade_num_minus_one,cog_amount,upgrade_true_names):
-
+def get_upgrade(upgrade_num_minus_one,cog_amount,upgrade_true_names,because_locked):
     cog_amount = find_cog_amount()
     upgrade_cost = int(get_upgrade_costs()[upgrade_num_minus_one])
     down_upgrade_multiplier = (upgrade_num_minus_one*85)
@@ -195,18 +196,17 @@ def get_upgrade(upgrade_num_minus_one,cog_amount,upgrade_true_names):
 
     lock_pos = (lock_x_value, y_value)
     upgrade_pos = (upgrade_x_value, y_value)
-
     if cog_amount >= upgrade_cost:
         click_on_pos(0.5, upgrade_pos)
-        pass
-    elif cog_amount < upgrade_cost:
+    elif (cog_amount < upgrade_cost) and not because_locked:
         click_on_pos(0.5, lock_pos)
+        print(upgrade_true_names)
         print(f"Not enough cogs to get '{upgrade_true_names[upgrade_num_minus_one]}', locking it to get it next round.")
 
-def get_upgrades(cog_amount,should_upgrade, upgrade_true_names):
+def get_upgrades(cog_amount,should_upgrade, upgrade_true_names, because_locked):
     for index,value in enumerate(should_upgrade):
         if value == "Good":
-            get_upgrade(index, cog_amount, upgrade_true_names)
+            get_upgrade(index, cog_amount, upgrade_true_names, because_locked)
 
 def get_upgrade_costs():
     text = ""
@@ -219,7 +219,7 @@ def get_upgrade_costs():
     upgrade_costs = []
 
     # Regular expression to find the "Cost: <number>" pattern
-    cost_pattern = re.compile(r'Cost:\s*(\d+)')
+    cost_pattern = re.compile(r'\s*(\d+\s*cogs)')
 
     # Iterate over each line and search for the pattern
     for line in lines:
@@ -229,6 +229,8 @@ def get_upgrade_costs():
             cost = int(match.group(1))
             # Add the cost to the list
             upgrade_costs.append(cost)
+        if not match:
+            upgrade_costs.append("100000000000")
 
     return upgrade_costs
 
@@ -241,9 +243,12 @@ def get_locked_upgrades(all_upgrades_dictionary,allow_auto_get_locked_upgrades):
         for i in range(3):
             if contains_rgb_value(f"pics/lock{i+1}.png", (232,232,232)) == True:
                 print("Found lock in use. Getting upgrade...")
-                get_upgrade(i, cog_amount, upgrade_true_names)
+                get_upgrade(i, cog_amount, upgrade_true_names, True)
 
 def DO_UPGRADES(all_upgrades_dictionary, allow_auto_get_locked_upgrades):
+    take_screenshot()
+    create_lock_images()
+    get_upgrade_name_pictures()
     cog_amount = find_cog_amount()
     get_locked_upgrades(all_upgrades_dictionary,allow_auto_get_locked_upgrades) #this has much of the same as the lines below but i wanted the non-lock upgrade picking code to be clear
 
@@ -253,4 +258,4 @@ def DO_UPGRADES(all_upgrades_dictionary, allow_auto_get_locked_upgrades):
     upgrade_name_list = get_upgrade_names()
     should_upgrade, upgrade_true_names = determine_if_choosing_upgrade(upgrade_name_list, all_upgrades_dictionary)
 
-    get_upgrades(cog_amount,should_upgrade,upgrade_true_names)
+    get_upgrades(cog_amount,should_upgrade,upgrade_true_names, False)
